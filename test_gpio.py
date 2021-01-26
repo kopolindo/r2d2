@@ -29,7 +29,7 @@ gpio.setup(DS,gpio.OUT)
 gpio.setup(SH,gpio.OUT)
 gpio.setup(ST,gpio.OUT)
 
-def clock():
+def tick():
     time.sleep(0.1)
     gpio.output(SH,1)
     time.sleep(0.1)
@@ -41,6 +41,15 @@ def latch():
     time.sleep(0.1)
     gpio.output(ST,0)
 
+def push_bit(bit):
+    gpio.output(DS,bit)
+
+def set_list(l):
+    for bit in reversed(l):
+        push_bit(bit)
+        tick()
+    latch()
+
 def LED_color(LED,color):
     if color == "RED":
         pin = LED.pin1
@@ -51,17 +60,18 @@ def LED_color(LED,color):
     print("I want {} HIGH, so I need {} clocks".format(pin,useful_clocks))
     for p in range(padding_clocks):
         gpio.output(DS,0)
-        clock()
+        tick()
     for i in range(useful_clocks):
         if i == 0:
             gpio.output(DS,1)
         else:
             gpio.output(DS,0)
-        clock()
+        tick()
 
 if __name__ == "__main__":
-    LED_color(LED4,"RED")
-    latch()
+    # LED_color(LED4,"RED")
+    # latch()
+    set_list([1,0,1,0,0,0,0,1])
     gpio.cleanup()
     """while 1:
         for y in range(8):
