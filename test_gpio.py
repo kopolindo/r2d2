@@ -71,7 +71,14 @@ def LED_color(LED,color):
 if __name__ == "__main__":
     # LED_color(LED4,"RED")
     # latch()
+    #          R   R  OFF  G
     set_list([1,0,1,0,0,0,0,1])
+    #          G   G  OFF  R
+    set_list([0,1,0,1,0,0,1,0])
+    #         OFF OFF  G  OFF
+    set_list([0,0,0,0,0,1,0,0])
+    #         OFF OFF  R  OFF
+    set_list([0,0,0,0,1,0,0,0])
     gpio.cleanup()
     """while 1:
         for y in range(8):
