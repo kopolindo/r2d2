@@ -26,7 +26,7 @@ Those steps are optional, since they allow me to work as I'm used to, instead th
 
 # Playing with GPIO and shift register (74HC595)
 My goal is to build something like this  
-[back-status_display](linkhere)  
+![back-status_display](images/status_leds.jpg)  
 To do this I needed a lot (81) of LEDs, in particular:
 - head ø = 3mm
 - bicolor (RED and GREEN)
