@@ -32,4 +32,3 @@ To do this I needed a lot (81) of LEDs, in particular:
 - bicolor (RED and GREEN)
 
 well, firstly I made a mistake and bought 200 bicolor (R/G) LEDs with 2 anodes and common cathod. This kind of LED will lighten in RED color if one just two leads (the color is of the anode will be pulled HIGH and the other anode pulled LOW, viceversa, it will light up in GREEN. Even if it seemed a good idea at first, it turned out to be a waste of pin. In fact, the other component I needed to build the status display with soooo many LEDs, it's obviously a shift register serial to parallel: an awesome component that will allow me to control 8 PINs at cost of only 3 PINs. Now, using shift register and three lead LEDs (as shown hereafter) I was able to control 4 LEDs at expense of three GPIO PINs...GREAT PLAN -.-  
-Well, while waiting for the new R/G LED (ø3mm) with just two leads (the color is 
