@@ -15,7 +15,7 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 gpio.setmode(gpio.BOARD)
-shift_register = my_register(11,15,13)
+shift_register = my_register(11,15,13,2)
 
 pause = 0.3
 
@@ -49,11 +49,13 @@ def input_from_file(ifile):
     return color_list
 
 if __name__ == "__main__":
+    shift_register.set_by_list([1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0])
+    sleep(1)
     # I choose to use sys.argv instead of argparse for sake of brevity
     # If there is no file input argument than random color list is used
     if len(sys.argv) == 1:
         while True:
-            shift_register.set_by_list(random_color_list(4))
+            shift_register.set_by_list(random_color_list(8))
             sleep(0.3)
         gpio.cleanup()
     # if file input is provided than use that configuration
