@@ -3,7 +3,6 @@ import RPi.GPIO as gpio
 from time import sleep
 import time, signal, sys, random
 
-
 class my_register(pi74HC595):
     def set_by_list(self,l=list):
         super(my_register,self).set_by_list(list(reversed(l)))
@@ -15,9 +14,10 @@ def signal_handler(sig, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 gpio.setmode(gpio.BOARD)
+#shift_register = pi74HC595(11,15,13,2)
 shift_register = my_register(11,15,13,2)
 
-pause = 0.3
+pause = 0.1
 
 # input: number of color list you want (eg:4)
 # output: list of random colors (eg:[1,0,0,1,0,1,0,1] = red,green,green,green)
@@ -49,14 +49,12 @@ def input_from_file(ifile):
     return color_list
 
 if __name__ == "__main__":
-    shift_register.set_by_list([1,0,1,0,1,0,1,0,1,0,1,0,1,0,1,0])
-    sleep(1)
     # I choose to use sys.argv instead of argparse for sake of brevity
     # If there is no file input argument than random color list is used
     if len(sys.argv) == 1:
         while True:
             shift_register.set_by_list(random_color_list(8))
-            sleep(0.3)
+            sleep(pause)
         gpio.cleanup()
     # if file input is provided than use that configuration
     else:
@@ -64,5 +62,5 @@ if __name__ == "__main__":
         while True:
             for c in color_list:
                 shift_register.set_by_list(c)
-                sleep(0.3)
+                sleep(pause)
         gpio.cleanup()

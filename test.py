@@ -1,6 +1,7 @@
 # test alex
 import RPi.GPIO as gpio
-import signal,sys,time,random
+import signal,sys,random
+from time import sleep
 
 # define signal handler to gracefully exit
 def signal_handler(sig, frame):
@@ -27,18 +28,18 @@ pause = 0.003
 # output: none
 # it just provides a rising edge for the ST_CP pin (clock)
 def tick():
-    time.sleep(pause)
+    sleep(pause)
     gpio.output(SH,1)
-    time.sleep(pause)
+    sleep(pause)
     gpio.output(SH,0)
 
 # input: none
 # output: none
 # it just provides a rising edge for the SH_CP pin (latch)
 def latch():
-    time.sleep(pause)
+    sleep(pause)
     gpio.output(ST,1)
-    time.sleep(pause)
+    sleep(pause)
     gpio.output(ST,0)
 
 # input: none
@@ -94,7 +95,7 @@ if __name__ == "__main__":
     # If there is no file input argument than random color list is used
     if len(sys.argv) == 1:
         while True:
-            set_list(random_color_list(4))
+            set_list(random_color_list(8))
         gpio.cleanup()
     # if file input is provided than use that configuration
     else:
