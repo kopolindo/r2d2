@@ -15,9 +15,10 @@ signal.signal(signal.SIGINT, signal_handler)
 
 gpio.setmode(gpio.BOARD)
 #shift_register = pi74HC595(11,15,13,2)
-shift_register = my_register(11,15,13,2)
+shift_register = my_register(11,15,13,1)
 
-pause = 0.1
+pause = 0.3
+LED_NUM = 8
 
 # input: number of color list you want (eg:4)
 # output: list of random colors (eg:[1,0,0,1,0,1,0,1] = red,green,green,green)
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     # If there is no file input argument than random color list is used
     if len(sys.argv) == 1:
         while True:
-            shift_register.set_by_list(random_color_list(8))
+            shift_register.set_by_list(random_color_list(LED_NUM))
             sleep(pause)
         gpio.cleanup()
     # if file input is provided than use that configuration
