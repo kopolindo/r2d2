@@ -1,7 +1,11 @@
-# test alex
+from pi74HC595 import pi74HC595
 import RPi.GPIO as gpio
-import signal,sys,random
 from time import sleep
+import time, signal, sys, random
+
+class my_register(pi74HC595):
+    def set_by_list(self,l=list):
+        super(my_register,self).set_by_list(list(reversed(l)))
 
 # define signal handler to gracefully exit
 def signal_handler(sig, frame):
@@ -9,57 +13,12 @@ def signal_handler(sig, frame):
     sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
-# define ANODE number (my LEDs have two anodes and one common cathode)
-ANODE_NUM=2
-# set gpio mode and 74HC595 PINs
 gpio.setmode(gpio.BOARD)
-DS=11
-SH=13
-ST=15
-# initialize board
-gpio.setup(DS,gpio.OUT)
-gpio.setup(SH,gpio.OUT)
-gpio.setup(ST,gpio.OUT)
+#shift_register = pi74HC595(11,15,13,2)
+shift_register = my_register(11,15,13,1)
 
-# define time to sleep
-pause = 0.003
-
-# input: none
-# output: none
-# it just provides a rising edge for the ST_CP pin (clock)
-def tick():
-    sleep(pause)
-    gpio.output(SH,1)
-    sleep(pause)
-    gpio.output(SH,0)
-
-# input: none
-# output: none
-# it just provides a rising edge for the SH_CP pin (latch)
-def latch():
-    sleep(pause)
-    gpio.output(ST,1)
-    sleep(pause)
-    gpio.output(ST,0)
-
-# input: none
-# output: none
-# it is just an alias, syntactic sugar
-def push_bit(bit):
-    gpio.output(DS,bit)
-
-# input: list of bits (HIGH/LOW) (eg: [1,0,1,0,0,1,0,1] = red,red,green,green)
-# output: none
-# it pushes vbits (HIHG/LOW) to the shift register and outputs them
-def set_list(l):
-    # must be reversed, you push and shift, push and shift, etc
-    for bit in reversed(l):
-        # for every bit pushed...
-        push_bit(bit)
-        # ...one clock (rising edge) to memorize it
-        tick()
-    # at last a rising edge on the latch pin will output serialized values
-    latch()
+pause = 0.3
+LED_NUM = 8
 
 # input: number of color list you want (eg:4)
 # output: list of random colors (eg:[1,0,0,1,0,1,0,1] = red,green,green,green)
@@ -95,12 +54,14 @@ if __name__ == "__main__":
     # If there is no file input argument than random color list is used
     if len(sys.argv) == 1:
         while True:
-            set_list(random_color_list(8))
+            shift_register.set_by_list(random_color_list(LED_NUM))
+            sleep(pause)
         gpio.cleanup()
     # if file input is provided than use that configuration
     else:
         color_list = input_from_file(sys.argv[1])
         while True:
             for c in color_list:
-                set_list(c)
+                shift_register.set_by_list(c)
+                sleep(pause)
         gpio.cleanup()
