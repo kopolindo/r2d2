@@ -1,7 +1,8 @@
-from pi74HC595 import pi74HC595
-import RPi.GPIO as gpio
 from time import sleep
-import time, signal, sys, random
+import time, signal, sys, random, os
+if os.uname().machine == "armv6l":
+    from pi74HC595 import pi74HC595
+    import RPi.GPIO as gpio
 
 # CONSTANTS
 pause = 0.2
